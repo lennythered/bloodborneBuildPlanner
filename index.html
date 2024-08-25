@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Bloodborne Build Planner</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <h1 class="title">Bloodborne Build Planner</h1>
+    <div id="mainDiv"></div>
+    Level: <span id="level">1</span> <br>
+    Blood echos needed for next level: <span id="amountForNextLevel">1000</span> <br>
+    Total blood echos: <span id="totalBloodEchos">5000</span> <br>
+    <form class="build-form">
+        <label for="origin-select">Origin:</label>
+        <select id="origin-select">
+            <option value="Lone Survivor">Lone Survivor</option>
+            <option value="Milktoast">Milktoast</option>
+            <option value="Noble Scion">Noble Scion</option>
+            <option value="Cruel Fate">Cruel Fate</option>
+            <option value="Violent Past">Violent Past</option>
+            <option value="Professional">Professional</option>
+            <option value="Military Veteran">Military Veteran</option>
+            <option value="Waste of Skin">Waste of Skin</option>
+            <option value="Troubled Childhood">Troubled Childhood</option>
+        </select>
+
+        <label for="vitality">Vitality:</label>
+        <input type="number" id="vitality" name="vitality" value="10" />
+
+        <label for="endurance">Endurance:</label>
+        <input type="number" id="endurance" name="endurance" />
+
+        <label for="strength">Strength:</label>
+        <input type="number" id="strength" name="strength" />
+
+        <label for="skill">Skill:</label>
+        <input type="number" id="skill" name="skill" />
+
+        <label for="bloodtinge">Bloodtinge:</label>
+        <input type="number" id="bloodtinge" name="bloodtinge" />
+
+        <label for="arcane">Arcane:</label>
+        <input type="number" id="arcane" name="arcane" />
+    </form>
+    <div class="build-results-container">
+       
+         <div>HP: <span id="HP">currentHealth</span></div>
+      
+        <div>Stamina: <span id="Stamina">Stamina</span></div>
+        <div>Discovery: <span id="Discovery">Discovery</span></div> 
+        <div>R-hand-WPN1 ATK: <span id="rAttack1">Attack</span> </div>
+        <div>R-hand WPN 2 ATK: <span id="rAttack2">Attack</span></div>
+        <div>L-hand WPN 1 ATK: <span id="lAttack1">Attack</span> </div>
+        <div>L-hand WPN 2 ATK: <span id="currentAttack4">Attack</span> </div>
+        <div>Physical DEF: <span id="currentDef1">Def</span> </div>
+        <div>Slow Poison RES: <span id="currentDef2">Def</span> </div>
+        <div>Rapid Poison RES: <span id="currentDef3">Def</span> </div>
+        <div>Frenzy RES: <span id="currentDef4">Def</span> </div>
+       <div> Physical DEF: <span id="currentDef5">Def</span> </div>
+    </div>
+    <div class="rune-effects">
+        <h1>Rune Effect</h1><br>
+        Caryll Rune 1: <br>
+        <select id="rune-select1">
+            <option value="rune1">Rune Selected</option>
+            <option value="rune2">Rune Selected</option>
+            <option value="rune3">Rune Selected</option>
+        </select>
+        Caryll Rune 2: <br>
+        <select id="rune-select2">
+            <option value="rune1">Rune Selected</option>
+            <option value="rune2">Rune Selected</option>
+            <option value="rune3">Rune Selected</option>
+        </select>
+        Caryll Rune 3: <br>
+        <select id="rune-select3">
+            <option value="rune1">Rune Selected</option>
+            <option value="rune2">Rune Selected</option>
+            <option value="rune3">Rune Selected</option>
+        </select>
+    </div>
+    <div class="equipment">
+        Head Piece<br>
+        Chest<br>
+        Hands<br>
+        Legs<br><br>
+        R-hand WPN1<br>
+        R-hand WPN2<br>
+        L-hand WPN1<br>
+        L-hand WPN2<br><br>
+    </div>
+    <div class="damage-reduction">
+        Damage Reduction <br>
+        Physical: <span id="physicalAmount">amount</span> <br>
+        VS. Blunt: <span id="vsBlunt">amount</span> <br>
+        VS. Thrust: <span id="vsThrust">amount</span> <br>
+        Blood: <span id="blood">amount</span> <br>
+        Arcane: <span id="arcanedef">amount</span> <br>
+        Fire: <span id="fire">amount</span> <br>
+        Bolt: <span id="bolt">amount</span> <br>
+    </div>
+</body>
+</html>
+
