@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
  
   const hpDisplay = document.getElementById('HP');
   const staminaDisplay = document.getElementById('Stamina');
+  const discoveryDisplay = document.getElementById('discovery');
     
   // Health calculation based on vitality
   function calculateHealth(vitality) {
@@ -92,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
           calculatedHealth = 511;
           return calculatedHealth;
       }
-          //most common starting case
+          //all other cases
     if (vitality > 7) {
         loopCount = vitality - 7;
         for(let i =0; i< loopCount; i++){
@@ -119,9 +120,30 @@ function calculateStamina(endurance){
         }
         return calculatedStamina;
     }
-    
-}
+  }
 
+  function calculateDiscovery(arcane) {
+    var calculatedDiscovery = 100;
+    const discoveryChange = [3,3,3,3,3,3,3,3,3,4,3,3,3,3,3,4,3,3,3,3,3,4,2,2,2,2,2,2,2,2,2,2,2,1,2,3,2,2,2,2,1]; // levels 9 to 50 
+    //min case
+    if (arcane < 9) {
+      return calculatedDiscovery;
+    }
+    // max case
+    if (arcane >=50){
+      calculatedDiscovery = 209;
+      return calculatedDiscovery;
+    }
+    if (arcane >= 9 && arcane < 50){
+      loopCountArcane = arcane - 8;
+      for (let i=0; i < loopCountArcane; i++){
+        calculatedDiscovery += discoveryChange[i];
+      }
+      return calculatedDiscovery;
+    }
+  }
+
+//functions to update derived values
   function updateHealth() {
     const vitality = parseInt(vitalityInput.value); // Get vitality
     const health = calculateHealth(vitality);
@@ -132,6 +154,11 @@ function calculateStamina(endurance){
     const stamina = calculateStamina(endurance);
     staminaDisplay.textContent = stamina; // Update the stamina display
     }
+  function updateDiscovery(){
+    const arcane = parseInt(arcaneInput.value);
+    const discovery = calculateDiscovery(arcane);
+    discoveryDisplay.textContent = discovery;
+  }
 
   // Set initial health value
   updateHealth();
@@ -140,5 +167,7 @@ function calculateStamina(endurance){
   // Add event listener to update health on vitality change
   vitalityInput.addEventListener('input', updateHealth);
   // Add event listener to update stamina on endurance change
-    enduranceInput.addEventListener('input', updateStamina);
+  enduranceInput.addEventListener('input', updateStamina);
+  // Add event listener to update item discovery on arcane change
+  arcaneInput.addEventListener('input', updateDiscovery);
 });
