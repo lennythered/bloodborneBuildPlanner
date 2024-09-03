@@ -5,7 +5,7 @@
     <title>Bloodborne Build Planner</title>
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
-    <script src="weaponsAndAR.js"defer></script>
+   <!--<script src="weaponsAndAR.js"defer></script>--> 
 </head>
 <body>
     <h1 class="title">Bloodborne Build Planner</h1>
@@ -85,10 +85,77 @@
         Chest<br>
         Hands<br>
         Legs<br><br>
-        R-hand WPN1<br>
-        R-hand WPN2<br>
-        L-hand WPN1<br>
-        L-hand WPN2<br><br>
+        <label for="rhand1-select">Right Hand 1:</label>
+        <select id="rhand1-select">
+            <!-- Options will be dynamically populated -->
+        </select>
+        Upgrade Level R-hand WPN1:
+        <select id = "upgradeLevelRightWeapon1">
+            <option type = number value= 1 >1</option>
+            <option type = number value= 2 >2</option>
+            <option type = number value= 3 >3</option>
+            <option type = number value= 4 >4</option>
+            <option type = number value= 5 >5</option>
+            <option type = number value= 6 >6</option>
+            <option type = number value= 7 >7</option>
+            <option type = number value= 8 >8</option>
+            <option type = number value= 9 >9</option>
+            <option type = number value= 10 >10</option>
+        </select>
+        <br>
+        <label for="rhand2-select">Right Hand 2:</label>
+        <select id="rhand2-select">
+            <!-- Options will be dynamically populated -->
+        </select>
+        Upgrade Level R-hand WPN2:
+        <select id = "upgradeLevelRightWeapon2">
+            <option value="1">1</option>
+            <option value="1">2</option>
+            <option value="1">3</option>
+            <option value="1">4</option>
+            <option value="1">5</option>
+            <option value="1">6</option>
+            <option value="1">7</option>
+            <option value="1">8</option>
+            <option value="1">9</option>
+            <option value="1">10</option>
+        </select>
+        <br>
+        <label for="lhand1-select">Left Hand 1:</label>
+        <select id="lhand1-select">
+            <!-- Options will be dynamically populated -->
+        </select>
+        Upgrade Level L-hand WPN1:
+        <select id = "upgradeLevelLeftWeapon1">
+            <option value="1">1</option>
+            <option value="1">2</option>
+            <option value="1">3</option>
+            <option value="1">4</option>
+            <option value="1">5</option>
+            <option value="1">6</option>
+            <option value="1">7</option>
+            <option value="1">8</option>
+            <option value="1">9</option>
+            <option value="1">10</option>
+        </select>
+        <br>
+        <label for="lhand2-select">Left Hand 2:</label>
+        <select id="lhand2-select">
+            <!-- Options will be dynamically populated -->
+        </select>
+        Upgrade Level L-hand WPN2:
+        <select id = "upgradeLevelLeftWeapon2">
+            <option value="1">1</option>
+            <option value="1">2</option>
+            <option value="1">3</option>
+            <option value="1">4</option>
+            <option value="1">5</option>
+            <option value="1">6</option>
+            <option value="1">7</option>
+            <option value="1">8</option>
+            <option value="1">9</option>
+            <option value="1">10</option>
+        </select>
     </div>
     <div class="damage-reduction">
         Damage Reduction <br>
