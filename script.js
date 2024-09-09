@@ -7,6 +7,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const skillInput = document.querySelector('#skill');
   const bloodtingeInput = document.querySelector('#bloodtinge');
   const arcaneInput = document.querySelector('#arcane');
+  const upgradeLevelR1 = document.querySelector('#upgradeLevelRightWeapon1');
+  const upgradeLevelR2 = document.querySelector('#upgradeLevelRightWeapon2');
+  const upgradeLevelL1 = document.querySelector('#upgradeLevelLeftWeapon1');
+  const upgradeLevelL2 = document.querySelector('#upgradeLevelLightWeapon2');
 //Origin stats for the starting classes
   const originStats = {
     "Lone Survivor":      { vitality: 14, endurance: 11, strength: 11, skill: 10, bloodtinge: 7, arcane: 7 },
@@ -86,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const weapon2RightHandAttackDisplay = document.getElementById("rAttack2");
   const weapon1LeftHandAttackDisplay = document.getElementById("lAttack1");
   const weapon2LeftHandAttackDisplay = document.getElementById("lAttack2");
+
     
   // Health calculation based on vitality
   function calculateHealth(vitality) {
@@ -176,6 +181,8 @@ function calculateStamina(endurance){
   // Add event listener to update item discovery on arcane change
   arcaneInput.addEventListener('input', updateDiscovery);
 
+
+
 //////////////////////////////////////////////////This section handles the weapon select////////////////////////////////////////////////////////
 
 //constructor for the weapon class
@@ -201,13 +208,39 @@ meetsRequirements() {
   }
 }
 
-function calculateAR() {
+  // Initialize the upgrade level on page load
+  function initializeUpgradeLevel() {
+    const upgradeLevel = getSelectedUpgradeLevel(); // Initialize with current value
+    console.log(`Initial upgrade level:`, upgradeLevel);
+    // You can use this value to set up any initial calculations or display
+  }
+
+  // Event listener for when the upgrade level is changed
+  document.getElementById('upgradeLevelRightWeapon1').addEventListener('change', () => {
+    getSelectedUpgradeLevel(); // Trigger when the upgrade level is changed
+  });
+
+  // Run initialization when the page loads
+  window.addEventListener('load', initializeUpgradeLevel);
+
+function getSelectedUpgradeLevel() {
+  const upgradeLevelSelect = document.getElementById('upgradeLevelRightWeapon1');
+  const selectedValue = upgradeLevelSelect.value; // Get the string value
+  const upgradeLevel = parseInt(selectedValue); // Convert to integer
+  console.log(`Selected upgrade level (as int):`, upgradeLevel);
+  return upgradeLevel;
+}
+//upgradeLevelR1.addEventListener('change', getUpgradeLevel1());
+
+/*function calculateAR() {
   //Attack Rating = Base Damage + (Base Damage * Attribute Scaling Ratio * Attribute Rating)
-  const upgradeLevelR1 = document.getElementById("upgradeLevelRightWeapon1");
+
+  var upgradeLevelR1 = parseInt(getSelectedUpgradeLevel());
   const equippedWeaponR1 = document.getElementById("rhand1-select");
   console.log('rhand1Select:', rhand1Select);
-  const baseDamage = equippedWeaponR1.baseDamage[upgradeLevelR1];
-  const scaling = equippedWeaponR1.scaling[upgradeLevelR1];
+  console.log('equippedWeaponR1', equippedWeaponR1);
+  const baseDamage = equippedWeaponR1.baseDamage[3];// testing with hardcoded numbers
+  const scaling = equippedWeaponR1.scaling[3]; // testing with hardcoded numbers
   var strengthAttributeRating = this.strengthAttributeRating;
   console.log('Base Damage:', baseDamage); // Debugging: Output the base damage
   console.log('Scaling:', scaling); // Debugging: Output the scaling values
@@ -248,75 +281,74 @@ function calculateAR() {
   console.log('Total AR:', totalAR); // Debugging: Output the total AR
 
   return totalAR;
-}
+} */
 
-const weaponData = {
-  sawCleaver: {
-    name: 'Saw Cleaver',
-    sawCleaverBaseDamage : {
-      0: { physical: 90, arcane: 0 },
-      1: { physical: 99, arcane: 0 },
-      2: { physical: 108, arcane: 0 },
-      3: { physical: 117, arcane: 0 },
-      4: { physical: 126, arcane: 0 },
-      5: { physical: 135, arcane: 0 },
-      6: { physical: 144, arcane: 0 },
-      7: { physical: 153, arcane: 0 },
-      8: { physical: 162, arcane: 0 },
-      9: { physical: 171, arcane: 0 },
-      10: { physical: 180, arcane: 0 }
-      // Continue for all levels
+  const weaponData = {
+    sawCleaver: {
+      name: 'Saw Cleaver',
+      baseDamageByLevel : {
+        0: { physical: 90},
+        1: { physical: 99},
+        2: { physical: 108},
+        3: { physical: 117},
+        4: { physical: 126},
+        5: { physical: 135},
+        6: { physical: 144},
+        7: { physical: 153},
+        8: { physical: 162},
+        9: { physical: 171},
+        10: { physical: 180}
+        // Continue for all levels
+      },
+      scalingByLevel : {
+        0: { strength: 0.40, skill: 0.2, arcane: 0.33 },
+        1: { strength: 0.42, skill: 0.22, arcane: 0.35 },
+        2: { strength: 0.44, skill: 0.24, arcane: 0.37 },
+        3: { strength: 0.46, skill: 0.26, arcane: 0.39 },
+        4: { strength: 0.48, skill: 0.28, arcane: 0.41 },
+        5: { strength: 0.50, skill: 0.30, arcane: 0.44 },
+        6: { strength: 0.52, skill: 0.32, arcane: 0.46 },
+        7: { strength: 0.54, skill: 0.34, arcane: 0.48 },
+        8: { strength: 0.56, skill: 0.36, arcane: 0.40 },
+        9: { strength: 0.58, skill: 0.38, arcane: 0.52 },
+        10: { strength: 0.60, skill: 0.40, arcane: 0.55 }
+        // Continue for all levels
+      },
+      statRequirements: {strength: 9, skill:9, arcane: 0} //I have changed this for editing 20 is not required.
     },
-    sawCleaverScaling : {
-      0: { strength: 0.40, skill: 0.2, arcane: 0.33 },
-      1: { strength: 0.42, skill: 0.22, arcane: 0.35 },
-      2: { strength: 0.44, skill: 0.24, arcane: 0.37 },
-      3: { strength: 0.46, skill: 0.26, arcane: 0.39 },
-      4: { strength: 0.48, skill: 0.28, arcane: 0.41 },
-      5: { strength: 0.50, skill: 0.30, arcane: 0.44 },
-      6: { strength: 0.52, skill: 0.32, arcane: 0.46 },
-      7: { strength: 0.54, skill: 0.34, arcane: 0.48 },
-      8: { strength: 0.56, skill: 0.36, arcane: 0.40 },
-      9: { strength: 0.58, skill: 0.38, arcane: 0.52 },
-      10: { strength: 0.60, skill: 0.40, arcane: 0.55 }
-      // Continue for all levels
-    },
-    statRequirements: {strength: 9, skill:9, arcane: 0} //I have changed this for editing 20 is not required.
-  },
-  noWeapon : {
-    name: 'No Weapon',
-    sawCleaverBaseDamage : {
-      0: { physical: 90, arcane: 0 },
-      1: { physical: 99, arcane: 0 },
-      2: { physical: 108, arcane: 0 },
-      3: { physical: 117, arcane: 0 },
-      4: { physical: 126, arcane: 0 },
-      5: { physical: 135, arcane: 0 },
-      6: { physical: 144, arcane: 0 },
-      7: { physical: 153, arcane: 0 },
-      8: { physical: 162, arcane: 0 },
-      9: { physical: 171, arcane: 0 },
-      10: { physical: 180, arcane: 0 }
-      // Continue for all levels
-    },
-    sawCleaverScaling : {
-      0: { strength: 0.40, skill: 0.2, arcane: 0.33 },
-      1: { strength: 0.42, skill: 0.22, arcane: 0.35 },
-      2: { strength: 0.44, skill: 0.24, arcane: 0.37 },
-      3: { strength: 0.46, skill: 0.26, arcane: 0.39 },
-      4: { strength: 0.48, skill: 0.28, arcane: 0.41 },
-      5: { strength: 0.50, skill: 0.30, arcane: 0.44 },
-      6: { strength: 0.52, skill: 0.32, arcane: 0.46 },
-      7: { strength: 0.54, skill: 0.34, arcane: 0.48 },
-      8: { strength: 0.56, skill: 0.36, arcane: 0.40 },
-      9: { strength: 0.58, skill: 0.38, arcane: 0.52 },
-      10: { strength: 0.60, skill: 0.40, arcane: 0.55 }
-      // Continue for all levels
-    },
-    statRequirements: {strength: 9, skill:9, arcane: 0} //I have changed this for editing 20 is not required.
+    noWeapon : {
+      name: 'No Weapon',
+      baseDamageByLevel : {
+        0: { physical: 90, arcane: 0 },
+        1: { physical: 99, arcane: 0 },
+        2: { physical: 108, arcane: 0 },
+        3: { physical: 117, arcane: 0 },
+        4: { physical: 126, arcane: 0 },
+        5: { physical: 135, arcane: 0 },
+        6: { physical: 144, arcane: 0 },
+        7: { physical: 153, arcane: 0 },
+        8: { physical: 162, arcane: 0 },
+        9: { physical: 171, arcane: 0 },
+        10: { physical: 180, arcane: 0 }
+        // Continue for all levels
+      },
+      scalingByLevel : {
+        0: { strength: 0.40, skill: 0.2, arcane: 0.33 },
+        1: { strength: 0.42, skill: 0.22, arcane: 0.35 },
+        2: { strength: 0.44, skill: 0.24, arcane: 0.37 },
+        3: { strength: 0.46, skill: 0.26, arcane: 0.39 },
+        4: { strength: 0.48, skill: 0.28, arcane: 0.41 },
+        5: { strength: 0.50, skill: 0.30, arcane: 0.44 },
+        6: { strength: 0.52, skill: 0.32, arcane: 0.46 },
+        7: { strength: 0.54, skill: 0.34, arcane: 0.48 },
+        8: { strength: 0.56, skill: 0.36, arcane: 0.40 },
+        9: { strength: 0.58, skill: 0.38, arcane: 0.52 },
+        10: { strength: 0.60, skill: 0.40, arcane: 0.55 }
+        // Continue for all levels
+      },
+      statRequirements: {strength: 0, skill:0, arcane: 0} 
+    }
   }
-}
-
 
   // Define available weapons
  // Define available weapons
@@ -340,6 +372,7 @@ const rhand1Select = document.getElementById('rhand1-select');
 const rhand2Select = document.getElementById('rhand2-select');
 const lhand1Select = document.getElementById('lhand1-select');
 const lhand2Select = document.getElementById('lhand2-select');
+const upgradeLevelRightWeapon1 = document.getElementById('upgradeLevelRightWeapon1');
 
 // Function to populate weapon options
 function populateWeaponOptions() {
@@ -430,16 +463,21 @@ function createWeaponInstance(weaponId) {
 function handleWeaponChange() {
   populateWeaponOptions();
 }
+
 function handleWeaponSelect() {
   const weaponId = rhand1Select.value; // Get selected weapon ID from dropdown
-  const upgradeLevel = document.getElementById('upgradeLevelRightWeapon1'); // Example upgrade level, can be dynamically set
-  const weapon = createWeaponInstance(weaponId, upgradeLevel);
+  var upgradeLevel = parseInt(upgradeLevelRightWeapon1.value); // Example upgrade level, can be dynamically set
+  console.log('upgrade level is: ', upgradeLevel);
+  const weapon = createWeaponInstance(weaponId);
+  console.log('weapon data is: ', weapon);
 
   if (weapon) {
     // Do something with the weapon instance
-    console.log(`${weapon.name} has been equipped.`);
-    console.log(`${weapon.sawCleaverBaseDamage} is the current base damage.`);
-    console.log(`${weapon.sawCleaverScaling} is the current scaling.`);
+    const damageAtLevel = weapon.baseDamageByLevel[upgradeLevel];
+    const scalingAtLevel = weapon.scalingByLevel[upgradeLevel];
+    console.log('weapon equipped is: ', weapon);
+    console.log('base damage is: ', damageAtLevel); //testing
+    console.log('Scaling at level is: ', scalingAtLevel); //testing
   } else {
     console.log("Weapon not equipped due to unmet requirements or other issues.");
   }
@@ -458,10 +496,24 @@ lhand1Select.addEventListener('change', handleWeaponChange);
 lhand2Select.addEventListener('change', handleWeaponChange);
 
 // Add event listeners to update when upgrade level is chosen
-upgradeLevelRightWeapon1.addEventListener('change', calculateAR());
+//upgradeLevelRightWeapon1.addEventListener('change', calculateAR());
 ////////////////////////////////////////////////////////Section below deals with AR calculations////////////////////////////////////////////////////////////////////////
 //
 
+function calculateAR() {
+  console.log("we are caluclating AR");
+//const upgradeLevel = parseInt(document.getElementById('upgradeLevelRightWeapon1').value);
+const weaponName = document.getElementById('rhand1-select');
+console.log('current weapon name is ', weaponName);
+const selectedWeapon = weaponData[weaponName];
+console.log(Object.keys(weaponData));
+console.log("selected weapon is ", selectedWeapon);
+const damageAtLevel = selectedWeapon.BaseDamage[1].physical; //testing with hardcoded numbers
+const scalingAtLevel = selectedWeapon.Scaling[1];//testing with hardcoded numbers
+
+console.log(`Damage: ${damageAtLevel}`);
+console.log(`Scaling: Strength: ${scalingAtLevel.strength}, Skill: ${scalingAtLevel.skill}, Arcane: ${scalingAtLevel.arcane}`);
+}
 
 function updateRightWeaponAttack1 ()  {
   const strength = parseInt(strengthInput.value);
@@ -471,7 +523,7 @@ function updateRightWeaponAttack1 ()  {
   const stats = { strength, skill, arcane };
 
   // Calculate AR for Saw Cleaver at +2 upgrade level
-  const totalAR = sawCleaver.calculateAR(upgradeLevel, stats);
+  const totalAR = calculateAR();
 
   // Update the display with the calculated AR
   weapon1RightHandAttackDisplay.textContent = totalAR;
