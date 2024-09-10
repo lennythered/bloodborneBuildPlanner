@@ -424,7 +424,7 @@ document.addEventListener('DOMContentLoaded', function() {
  function calculateRapidPoisonRes () {
   endurance = parseInt(enduranceInput.value);
   var calculatedPoisonRes = 33;
-  rapidPoisonResistanceArray = [3,4,4,4,4,4,4,2,3,3,2,3,3,2,3,3,2,3,3,2,3,3,0,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,1,0,1,1,0,1,
+  const rapidPoisonResistanceArray = [3,4,4,4,4,4,4,2,3,3,2,3,3,2,3,3,2,3,3,2,3,3,0,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,1,0,1,1,0,1,
                                1,1,0,1,1,1,0,1,1,1,0,1,1,0,1,0,1,1,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,1];
    const loopCount = endurance - 8;
    for(let i = 0; i< loopCount; i++){
@@ -434,7 +434,45 @@ document.addEventListener('DOMContentLoaded', function() {
    rapidPoisonDefenseDisplay.textContent = calculatedPoisonRes;
  }
 
+ function calculateFrenzyRes (){
+  let insight = insightInput.value;
+  const frenzyResArray = [-3, -3, -2, -3, -3, -2, -3, -3, -2, -3, -3, -2, -3, -3, -2, -2, -1, -1, -2, -1, -1, -2, -1, -1, -2, -1,
+     -1, -2, -1, -1, -2, -1, -1, -2, -1, -1, -2, -1, -1, -2, -1, -1, -2, -1, -1, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0,
+      -1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0];
+  if (insight <= 15){
+    console.log("frenzy is below 15");
+    const frenzyRes = 100;
+    frenzyResDisplay.textContent = frenzyRes;
+    console.log("frenzy res is ", frenzyRes);
+  }
+  else if (insight >= 16){
+    console.log("frenzy is: ", insight);
+    var frenzyRes = 100;
+    loopCount = insight - 15;
+    for(let i = 0;i< loopCount;i++ ){
+      frenzyRes += frenzyResArray[i];
+      console.log("frenzy res is ___, frenzyarray value is___ ", frenzyRes, frenzyResArray[i]);
+    }
+
+    frenzyResDisplay.textContent = frenzyRes;
+  }
+ }
+
+ function calculateBeastHood () {
+  beastHoodArray = [300, 291, 282, 274, 265, 256, 248, 239, 230,222,213,204,196,
+    187,178,170, 165, 160, 156, 151, 146, 142, 137, 132, 128, 123,
+    118, 114, 109, 104, 100, 97, 94, 91, 88, 85, 82, 79, 76, 73,
+    70, 67, 64, 61, 58, 55, 51, 49, 45, 43, 40, 37, 34, 31, 28,
+    25, 22, 19, 16, 13, 10, 9,9,9,9,9,9,9,8,8,8,8,8,8,8,8,7,7,7,7,
+    7,7,7,7,6,6,6,6,6,6,6,6,5,5,5,5,5,5,5,5];
+    const beastHoodArrayIndex = insightInput.value;
+    const beastHood = beastHoodArray[beastHoodArrayIndex];
+    beastHoodDisplay.textContent = beastHood;
+ }
+
   //displays for attributes 
+  const beastHoodDisplay = document.getElementById('beastHood');
+  const frenzyResDisplay = document.getElementById('frenzyRes');
   const nextLevelDisplay = document.getElementById('amountForNextLevel');
   const levelDisplay = document.getElementById('level');
   const hpDisplay = document.getElementById('HP');
@@ -532,6 +570,11 @@ function calculateStamina(endurance){
   updateHealth();
   updateStamina();
 
+  //insight input listner
+  insightInput.addEventListener('input', function(){
+    calculateBeastHood ();
+    calculateFrenzyRes();
+  });
   // Add event listener to update health on vitality change
   vitalityInput.addEventListener('input', function () {
     updateHealth();
