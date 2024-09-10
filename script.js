@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
 //Origin stats for the starting classes
   const originStats = {
     "Lone Survivor":      { vitality: 14, endurance: 11, strength: 11, skill: 10, bloodtinge: 7, arcane: 7 },
-    "Milktoast":          { vitality: 9, endurance: 10, strength: 12, skill: 8, bloodtinge: 7, arcane: 5 },
+    "Milktoast":          { vitality: 11, endurance: 10, strength: 12, skill: 10, bloodtinge: 9, arcane: 8 },
     "Noble Scion":        { vitality: 7, endurance: 8, strength: 9, skill: 13, bloodtinge: 14, arcane: 9 },
     "Cruel Fate":         { vitality: 10, endurance: 12, strength: 10, skill: 9, bloodtinge: 5, arcane: 14 },
     "Violent Past":       { vitality: 12, endurance: 11, strength: 15, skill: 9, bloodtinge: 6, arcane: 7 },
@@ -307,6 +307,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // Update stats when the origin is changed
   originSelect.addEventListener('change', function() {
     updateStatsForOrigin();
+    calculateAR();
+    updateHealth();
+    updateStamina();
+    updateDiscovery();
+    updateLevel();
+    echosForNextLevel()
   });
 
   // Initialize the stats for the default selected origin
@@ -314,7 +320,75 @@ document.addEventListener('DOMContentLoaded', function() {
     updateStatsForOrigin();
   }
  
+  function updateLevel(){
+    //initial state
+    console.log('vitality, endurance', 'strength', 'skill', 'bloodtinge', 'arcane');
+    console.log(vitalityInput.value, enduranceInput.value, strengthInput.value, skillInput.value, bloodtingeInput.value,  arcaneInput.value);
+    const vitality = parseInt(vitalityInput.value);
+    const endurance = parseInt(enduranceInput.value);
+    const strength = parseInt(strengthInput.value);
+    const skill = parseInt(skillInput.value);
+    const blood = parseInt(bloodtingeInput.value);
+    const arcane = parseInt(arcaneInput.value);
+    totalAttributeSum = vitality + endurance + strength + skill + blood + arcane;
+    if (originSelect.value != 'Waste of Skin'){
+      const offset = 60;
+      const baseLevel = 10
+      const level = baseLevel + totalAttributeSum - offset
+      levelDisplay.textContent = level;
+      return level;
+    }
+    else {
+      const offset = 54;
+      const baseLevel = 4;
+      const level = baseLevel + totalAttributeSum - offset
+      levelDisplay.textContent = level;
+      return level;
+    }
+    
+  }
+
+  function echosForNextLevel(){
+    if (updateLevel() == 4){
+      nextLevelDisplay.textContent = 724;
+    }
+    else if (updateLevel() == 5){
+      nextLevelDisplay.textContent = 741;
+    }
+    else if (updateLevel() == 6){
+      nextLevelDisplay.textContent = 758;
+    }
+    else if (updateLevel() == 7){
+      nextLevelDisplay.textContent = 775;
+    }
+    else if (updateLevel() == 8){
+      nextLevelDisplay.textContent = 793;
+    }
+    else if (updateLevel() == 9){
+      nextLevelDisplay.textContent = 811;
+    }
+    else if (updateLevel() == 10){
+      nextLevelDisplay.textContent = 829;
+    }
+    else if (updateLevel() == 11){
+      nextLevelDisplay.textContent = 847;
+    }
+    else if (updateLevel() == 12){
+      nextLevelDisplay.textContent = 1039;
+    }
+    else if (updateLevel() == 13){
+      nextLevelDisplay.textContent = 1238;
+    }
+    else if (updateLevel() >= 14){
+      var currentLevel = updateLevel() +1;
+      var nextLevel = ((0.02*currentLevel**3) + (3.06*currentLevel**2) + (105.6*currentLevel) -895);
+      nextLevelDisplay.textContent = nextLevel;
+    }
+  }
+
   //displays for attributes 
+  const nextLevelDisplay = document.getElementById('amountForNextLevel');
+  const levelDisplay = document.getElementById('level');
   const hpDisplay = document.getElementById('HP');
   const staminaDisplay = document.getElementById('Stamina');
   const discoveryDisplay = document.getElementById('discovery');
@@ -408,17 +482,41 @@ function calculateStamina(endurance){
   updateStamina();
 
   // Add event listener to update health on vitality change
-  vitalityInput.addEventListener('input', updateHealth);
+  vitalityInput.addEventListener('input', function () {
+    updateHealth();
+    updateLevel();
+    echosForNextLevel()
+  });
   // Add event listener to update stamina on endurance change
-  enduranceInput.addEventListener('input', updateStamina);
+  enduranceInput.addEventListener('input', function () {
+    updateStamina();
+    updateLevel();
+    echosForNextLevel()
+  });
   // Add event listener to update item discovery on arcane change
-  arcaneInput.addEventListener('input', updateDiscovery);
+  arcaneInput.addEventListener('input', function () {
+     updateDiscovery();
+     updateLevel();
+     echosForNextLevel()
+  });
   // Event listener to update strength's effect on AR
-  strengthInput.addEventListener('input', calculateAR);
+  strengthInput.addEventListener('input', function () {
+    calculateAR();
+    updateLevel();
+    echosForNextLevel()
+});
   // event listener to update skill's effect on AR
-  skillInput.addEventListener('input', calculateAR);
+  skillInput.addEventListener('input', function () {
+    calculateAR();
+    updateLevel();
+    echosForNextLevel()
+ });
   // event listener to update blood tinges effect on AR
-  bloodtingeInput.addEventListener('input', calculateAR);
+  bloodtingeInput.addEventListener('input', function () {
+    calculateAR();
+    updateLevel();
+    echosForNextLevel()
+});
 
 
 
