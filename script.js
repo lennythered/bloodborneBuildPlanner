@@ -7,10 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const skillInput = document.querySelector('#skill');
   const bloodtingeInput = document.querySelector('#bloodtinge');
   const arcaneInput = document.querySelector('#arcane');
-  const upgradeLevelR1 = document.querySelector('#upgradeLevelRightWeapon1');
-  const upgradeLevelR2 = document.querySelector('#upgradeLevelRightWeapon2');
-  const upgradeLevelL1 = document.querySelector('#upgradeLevelLeftWeapon1');
-  const upgradeLevelL2 = document.querySelector('#upgradeLevelLightWeapon2');
+  const insightInput = document.querySelector('#insight');
 //Origin stats for the starting classes
   const originStats = {
     "Lone Survivor":      { vitality: 14, endurance: 11, strength: 11, skill: 10, bloodtinge: 7, arcane: 7 },
@@ -257,6 +254,8 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 //ensure no stats can go above 99
   function setMinMaxAttributes(stats) {
+    insightInput.min = 0;
+    insightInput.max = 99;
     vitalityInput.min = stats.vitality;
     vitalityInput.max = 99;
     enduranceInput.min = stats.endurance;
@@ -300,7 +299,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Enforce the minimum and maximum values on all inputs
-  [vitalityInput, enduranceInput, strengthInput, skillInput, bloodtingeInput, arcaneInput].forEach(input => {
+  [vitalityInput, enduranceInput, strengthInput, skillInput, bloodtingeInput, arcaneInput, insightInput].forEach(input => {
     enforceMinMaxValue(input);
   });
 
@@ -380,7 +379,8 @@ document.addEventListener('DOMContentLoaded', function() {
     else if (updateLevel() >= 14){
       var currentLevel = updateLevel() +1;
       var nextLevel = ((0.02*currentLevel**3) + (3.06*currentLevel**2) + (105.6*currentLevel) -895);
-      nextLevelDisplay.textContent = nextLevel;
+      let roundednextLevel = Math.round(nextLevel);
+      nextLevelDisplay.textContent = roundednextLevel;
     }
   }
 //update the physical defense based on player level. This stat seems to have fairly random behaviour at lower levels
@@ -409,6 +409,31 @@ document.addEventListener('DOMContentLoaded', function() {
     physicalDefenseDisplay.textContent = calculatedPhysicalDefense;
    }
  }
+ function calculateSlowPoisonRes () {
+  endurance = parseInt(enduranceInput.value);
+  var calculatedPoisonRes = 25;
+  slowPoisonResistanceArray = [2,3,6,6,6,6,6,2,3,3,2,3,3,2,3,3,2,3,3,2,3,3,0,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,1,0,1,1,0,1,
+                               1,1,0,1,1,1,0,1,1,1,0,1,1,0,1,0,1,1,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,1];
+   const loopCount = endurance - 8;
+   for(let i = 0; i< loopCount; i++){
+    calculatedPoisonRes += slowPoisonResistanceArray[i];
+   }
+   slowPoisonDefenseDisplay.textContent = calculatedPoisonRes;
+ }
+
+ function calculateRapidPoisonRes () {
+  endurance = parseInt(enduranceInput.value);
+  var calculatedPoisonRes = 33;
+  rapidPoisonResistanceArray = [3,4,4,4,4,4,4,2,3,3,2,3,3,2,3,3,2,3,3,2,3,3,0,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,1,0,1,1,0,1,
+                               1,1,0,1,1,1,0,1,1,1,0,1,1,0,1,0,1,1,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,1];
+   const loopCount = endurance - 8;
+   for(let i = 0; i< loopCount; i++){
+    calculatedPoisonRes += rapidPoisonResistanceArray[i];
+    console.log("endurance is_, index is _, value is _", endurance, i, rapidPoisonResistanceArray[i]);
+   }
+   rapidPoisonDefenseDisplay.textContent = calculatedPoisonRes;
+ }
+
   //displays for attributes 
   const nextLevelDisplay = document.getElementById('amountForNextLevel');
   const levelDisplay = document.getElementById('level');
@@ -416,6 +441,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const staminaDisplay = document.getElementById('Stamina');
   const discoveryDisplay = document.getElementById('discovery');
   const physicalDefenseDisplay = document.getElementById("physicalDef");
+  const slowPoisonDefenseDisplay = document.getElementById("slowPoisonRes");
+  const rapidPoisonDefenseDisplay = document.getElementById("rapidPoisonRes");
   //variable to manipulate the displayed right hand attack for weapon 1
   const weapon1RightHandAttackDisplay = document.getElementById("rAttack1");
   const weapon2RightHandAttackDisplay = document.getElementById("rAttack2");
@@ -518,6 +545,8 @@ function calculateStamina(endurance){
     updateLevel();
     echosForNextLevel();
     updatePhysicalDefense();
+    calculateSlowPoisonRes ();
+    calculateRapidPoisonRes (); 
   });
   // Add event listener to update item discovery on arcane change
   arcaneInput.addEventListener('input', function () {
@@ -842,8 +871,9 @@ function calculateAR() {
   const skillScalingR1 = scalingAtLevelR1.skill;
   const strengthBonusR1 = strengthAttributeSaturation*strengthScalingR1;
   const skillBonusR1 = skillAttributeSaturation*skillScalingR1;
-  const totalARR1 = damageAtLevelR1 + ( damageAtLevelR1*strengthBonusR1 + damageAtLevelR1*skillBonusR1);
-  weapon1RightHandAttackDisplay.textContent = totalARR1;
+  let totalARR1 = damageAtLevelR1 + ( damageAtLevelR1*strengthBonusR1 + damageAtLevelR1*skillBonusR1);
+  let roundedARR1 = Math.round(totalARR1);
+  weapon1RightHandAttackDisplay.textContent = roundedARR1;
 
   // Right hand 2 weapon
   const weaponIdR2 = rhand2Select.value; // Get selected weapon ID from dropdown
@@ -856,7 +886,8 @@ function calculateAR() {
   const strengthBonusR2 = strengthAttributeSaturation*strengthScalingR2;
   const skillBonusR2 = skillAttributeSaturation*skillScalingR2;
   const totalARR2 = damageAtLevelR2 + ( damageAtLevelR2*strengthBonusR2 + damageAtLevelR2*skillBonusR2);
-  weapon2RightHandAttackDisplay.textContent = totalARR2;
+  let roundedARR2 = Math.round(totalARR2);
+  weapon2RightHandAttackDisplay.textContent = roundedARR2;
 
   // Left hand 1 weapon 
   const weaponIdL1 = lhand1Select.value; // Get selected weapon ID from dropdown
@@ -868,7 +899,8 @@ function calculateAR() {
     const bloodScalingL1 = scalingAtLevelL1.bloodtinge;
     const bloodBonusL1 = bloodtingeAttributeSaturation*bloodScalingL1;
     const totalARL1 = damageAtLevelL1 + ( damageAtLevelL1*bloodBonusL1);
-    weapon1LeftHandAttackDisplay.textContent = totalARL1;
+    let roundedARL1 = Math.round(totalARL1);
+    weapon1LeftHandAttackDisplay.textContent = roundedARL1;
   }
   //case if the weapon is no weapon 
   else if (weaponIdL1 == 'noWeapon'){
@@ -879,7 +911,8 @@ function calculateAR() {
     const strengthBonusL1 = strengthAttributeSaturation*strengthScalingL1;
     const skillBonusL1 = skillAttributeSaturation*skillScalingL1;
     const totalARL1 = damageAtLevelL1 + ( damageAtLevelL1*strengthBonusL1 + damageAtLevelL1*skillBonusL1);
-    weapon1LeftHandAttackDisplay.textContent = totalARL1;
+    let roundedARL1 = Math.round(totalARL1);
+    weapon1LeftHandAttackDisplay.textContent = roundedARL1;
   }
 
     // Left hand 2 weapon 
@@ -893,7 +926,8 @@ function calculateAR() {
       const bloodScalingL2 = scalingAtLevelL2.bloodtinge;
       const bloodBonusL2 = bloodtingeAttributeSaturation*bloodScalingL2;
       const totalARL2 = damageAtLevelL2 + ( damageAtLevelL2*bloodBonusL2);
-      weapon2LeftHandAttackDisplay.textContent = totalARL2;
+      let roundedARL2 = Math.round(totalARL2);
+      weapon2LeftHandAttackDisplay.textContent = roundedARL2;
     }
     //case if the weapon is no weapon 
     else if (weaponIdL2 == 'noWeapon'){
@@ -904,7 +938,8 @@ function calculateAR() {
       const strengthBonusL2 = strengthAttributeSaturation*strengthScalingL2;
       const skillBonusL2 = skillAttributeSaturation*skillScalingL2;
       const totalARL2 = damageAtLevelL2 + ( damageAtLevelL2*strengthBonusL2 + damageAtLevelL2*skillBonusL2);
-      weapon2LeftHandAttackDisplay.textContent = totalARL2;
+      let roundedARL2 = Math.round(totalARL2);
+      weapon2LeftHandAttackDisplay.textContent = roundedARL2;
     }
  
   
