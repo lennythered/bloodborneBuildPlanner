@@ -322,8 +322,6 @@ document.addEventListener('DOMContentLoaded', function() {
  
   function updateLevel(){
     //initial state
-    console.log('vitality, endurance', 'strength', 'skill', 'bloodtinge', 'arcane');
-    console.log(vitalityInput.value, enduranceInput.value, strengthInput.value, skillInput.value, bloodtingeInput.value,  arcaneInput.value);
     const vitality = parseInt(vitalityInput.value);
     const endurance = parseInt(enduranceInput.value);
     const strength = parseInt(strengthInput.value);
@@ -385,13 +383,74 @@ document.addEventListener('DOMContentLoaded', function() {
       nextLevelDisplay.textContent = nextLevel;
     }
   }
-
+//update the physical defense based on player level. This stat seems to have fairly random behaviour at lower levels
+ function updatePhysicalDefense () {
+  const level = updateLevel();
+  if (level <= 10){
+    var physicalDef = 10;
+    physicalDefenseDisplay.textContent = physicalDef;
+  }
+  else if (level <= 45 && level > 10){
+    var levelOffset = level - 10;
+    var physicalDef = 10 + 3*levelOffset; 
+    physicalDefenseDisplay.textContent = physicalDef;
+  }
+  else if (level == 46){
+    var physicalDef = 117;
+    physicalDefenseDisplay.textContent = physicalDef;
+  }
+  else if (level >= 47 && level <= 51){
+    var levelOffset = level - 46;
+    var physicalDef = 117 + levelOffset*3;
+    physicalDefenseDisplay.textContent = physicalDef;
+  }
+  else if (level == 52){
+    var physicalDef = 134;
+    physicalDefenseDisplay.textContent = physicalDef;
+  }
+  else if (level >= 53 && level <= 55){
+    var levelOffset = level - 52;
+    var physicalDef = 134 + levelOffset*3;
+    physicalDefenseDisplay.textContent = physicalDef;
+  }
+  else if (level == 56){
+    var physicalDef = 145;
+    physicalDefenseDisplay.textContent = physicalDef;
+  }
+  else if (level >= 57 && level <= 58){
+    var levelOffset = level - 56;
+    var physicalDef = 145 + levelOffset*3;
+    physicalDefenseDisplay.textContent = physicalDef;
+  }
+  else if (level == 59){
+    var physicalDef = 153;
+    physicalDefenseDisplay.textContent = physicalDef;
+  }
+  else if (level == 60){
+    var physicalDef = 156;
+    physicalDefenseDisplay.textContent = physicalDef;
+  }
+  else if (level >= 61 && level <= 63){
+    var levelOffset = level - 60;
+    var physicalDef = 156 + levelOffset*3;
+    physicalDefenseDisplay.textContent = physicalDef;
+  }
+  else if (level >= 64 && level <= ){
+    var levelOffset = level - 61;
+    var physicalDef = 158 + levelOffset*3;
+  }
+  else if (level == 70){
+    var physicalDef = 180;
+    physicalDefenseDisplay.textContent = physicalDef;
+  }
+ }
   //displays for attributes 
   const nextLevelDisplay = document.getElementById('amountForNextLevel');
   const levelDisplay = document.getElementById('level');
   const hpDisplay = document.getElementById('HP');
   const staminaDisplay = document.getElementById('Stamina');
   const discoveryDisplay = document.getElementById('discovery');
+  const physicalDefenseDisplay = document.getElementById("physicalDef");
   //variable to manipulate the displayed right hand attack for weapon 1
   const weapon1RightHandAttackDisplay = document.getElementById("rAttack1");
   const weapon2RightHandAttackDisplay = document.getElementById("rAttack2");
@@ -485,37 +544,43 @@ function calculateStamina(endurance){
   vitalityInput.addEventListener('input', function () {
     updateHealth();
     updateLevel();
-    echosForNextLevel()
+    echosForNextLevel();
+    updatePhysicalDefense();
   });
   // Add event listener to update stamina on endurance change
   enduranceInput.addEventListener('input', function () {
     updateStamina();
     updateLevel();
-    echosForNextLevel()
+    echosForNextLevel();
+    updatePhysicalDefense();
   });
   // Add event listener to update item discovery on arcane change
   arcaneInput.addEventListener('input', function () {
      updateDiscovery();
      updateLevel();
-     echosForNextLevel()
+     echosForNextLevel();
+     updatePhysicalDefense();
   });
   // Event listener to update strength's effect on AR
   strengthInput.addEventListener('input', function () {
     calculateAR();
     updateLevel();
-    echosForNextLevel()
+    echosForNextLevel();
+    updatePhysicalDefense();
 });
   // event listener to update skill's effect on AR
   skillInput.addEventListener('input', function () {
     calculateAR();
     updateLevel();
-    echosForNextLevel()
+    echosForNextLevel();
+    updatePhysicalDefense();
  });
   // event listener to update blood tinges effect on AR
   bloodtingeInput.addEventListener('input', function () {
     calculateAR();
     updateLevel();
-    echosForNextLevel()
+    echosForNextLevel();
+    updatePhysicalDefense();
 });
 
 
