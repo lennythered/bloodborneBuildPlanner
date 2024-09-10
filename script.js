@@ -386,63 +386,28 @@ document.addEventListener('DOMContentLoaded', function() {
 //update the physical defense based on player level. This stat seems to have fairly random behaviour at lower levels
  function updatePhysicalDefense () {
   const level = updateLevel();
-  if (level <= 10){
-    var physicalDef = 10;
-    physicalDefenseDisplay.textContent = physicalDef;
-  }
-  else if (level <= 45 && level > 10){
-    var levelOffset = level - 10;
-    var physicalDef = 10 + 3*levelOffset; 
-    physicalDefenseDisplay.textContent = physicalDef;
-  }
-  else if (level == 46){
-    var physicalDef = 117;
-    physicalDefenseDisplay.textContent = physicalDef;
-  }
-  else if (level >= 47 && level <= 51){
-    var levelOffset = level - 46;
-    var physicalDef = 117 + levelOffset*3;
-    physicalDefenseDisplay.textContent = physicalDef;
-  }
-  else if (level == 52){
-    var physicalDef = 134;
-    physicalDefenseDisplay.textContent = physicalDef;
-  }
-  else if (level >= 53 && level <= 55){
-    var levelOffset = level - 52;
-    var physicalDef = 134 + levelOffset*3;
-    physicalDefenseDisplay.textContent = physicalDef;
-  }
-  else if (level == 56){
-    var physicalDef = 145;
-    physicalDefenseDisplay.textContent = physicalDef;
-  }
-  else if (level >= 57 && level <= 58){
-    var levelOffset = level - 56;
-    var physicalDef = 145 + levelOffset*3;
-    physicalDefenseDisplay.textContent = physicalDef;
-  }
-  else if (level == 59){
-    var physicalDef = 153;
-    physicalDefenseDisplay.textContent = physicalDef;
-  }
-  else if (level == 60){
-    var physicalDef = 156;
-    physicalDefenseDisplay.textContent = physicalDef;
-  }
-  else if (level >= 61 && level <= 63){
-    var levelOffset = level - 60;
-    var physicalDef = 156 + levelOffset*3;
-    physicalDefenseDisplay.textContent = physicalDef;
-  }
-  else if (level >= 64 && level <= ){
-    var levelOffset = level - 61;
-    var physicalDef = 158 + levelOffset*3;
-  }
-  else if (level == 70){
-    var physicalDef = 180;
-    physicalDefenseDisplay.textContent = physicalDef;
-  }
+  var calculatedPhysicalDefense = 10;
+  const physicalDefenseArray = [3,3,3,3,3,3,3,3,3,3,3,4,3,3,3,3,3,3,3,3,3,3,3,3,3,2,3,3,3,3,3,3,3,3,3,2,3,3,3,3,3,2,3,3,3,2,3,3,2,3,2,3,3,2,
+                                2,3,2,2,3,2,1,1,1,1,1,2,1,1,1,1,1,2,1,1,1,1,1,2,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,0, 
+                                1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1,1,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
+                                1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
+                                1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
+                                1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
+                                1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
+                                1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
+                                1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
+                                1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0];
+                                
+   if (level == 4 || level < 11){
+    physicalDefenseDisplay.textContent = calculatedPhysicalDefense;
+   }
+   else if (level >= 11){
+    var loopCount = level -10;
+    for (let i = 0; i < loopCount; i++){
+      calculatedPhysicalDefense += physicalDefenseArray[i];
+    }
+    physicalDefenseDisplay.textContent = calculatedPhysicalDefense;
+   }
  }
   //displays for attributes 
   const nextLevelDisplay = document.getElementById('amountForNextLevel');
@@ -616,8 +581,6 @@ meetsRequirements() {
   // Initialize the upgrade level on page load
   function initializeUpgradeLevel() {
     const upgradeLevel = getSelectedUpgradeLevel(); // Initialize with current value
-    console.log(`Initial upgrade level:`, upgradeLevel);
-    // You can use this value to set up any initial calculations or display
   }
 
   // Event listener for when the upgrade level is changed
@@ -632,7 +595,6 @@ function getSelectedUpgradeLevel() {
   const upgradeLevelSelect = document.getElementById('upgradeLevelRightWeapon1');
   const selectedValue = upgradeLevelSelect.value; // Get the string value
   const upgradeLevel = parseInt(selectedValue); // Convert to integer
-  console.log(`Selected upgrade level (as int):`, upgradeLevel);
   return upgradeLevel;
 }
 
@@ -922,12 +884,10 @@ function calculateAR() {
 
     // Left hand 2 weapon 
     const weaponIdL2 = lhand2Select.value; // Get selected weapon ID from dropdown
-    console.log("weaponID in second slot is ", weaponIdL2);
     const weaponL2 = createWeaponInstance(weaponIdL2);
    // console.log("weapon in left slot 2 is: ", weaponL2);
     var upgradeLevelL2 = parseInt(upgradeLevelLeftWeapon2.value);
     if ((weaponIdL2) && weaponIdL2 != 'noWeapon'){
-      console.log("Theres a weapon in the second left slot");
       const damageAtLevelL2 = weaponL2.baseDamageByLevel[upgradeLevelL2].blood;
       const scalingAtLevelL2 = weaponL2.scalingByLevel[upgradeLevelL2];
       const bloodScalingL2 = scalingAtLevelL2.bloodtinge;
@@ -937,7 +897,6 @@ function calculateAR() {
     }
     //case if the weapon is no weapon 
     else if (weaponIdL2 == 'noWeapon'){
-      console.log("There's no weapon in the second left slot");
       const damageAtLevelL2 = weaponL2.baseDamageByLevel[upgradeLevelL2].physical;
       const scalingAtLevelL2 = weaponL2.scalingByLevel[upgradeLevelL2];
       const strengthScalingL2 = scalingAtLevelL2.strength;
