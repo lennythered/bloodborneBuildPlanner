@@ -307,9 +307,9 @@ document.addEventListener('DOMContentLoaded', function() {
   originSelect.addEventListener('change', function() {
     updateStatsForOrigin();
     calculateAR();
-    updateHealth();
-    updateStamina();
-    updateDiscovery();
+    calculateHealth();
+    calculateStamina();
+    calculateDiscovery();
     updateLevel();
     echosForNextLevel()
   });
@@ -386,74 +386,73 @@ document.addEventListener('DOMContentLoaded', function() {
 //update the physical defense based on player level. This stat seems to have fairly random behaviour at lower levels
  function updatePhysicalDefense () {
   const level = updateLevel();
-  var calculatedPhysicalDefense = 10;
-  const physicalDefenseArray = [3,3,3,3,3,3,3,3,3,3,3,4,3,3,3,3,3,3,3,3,3,3,3,3,3,2,3,3,3,3,3,3,3,3,3,2,3,3,3,3,3,2,3,3,3,2,3,3,2,3,2,3,3,2,
-                                2,3,2,2,3,2,1,1,1,1,1,2,1,1,1,1,1,2,1,1,1,1,1,2,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,0, 
-                                1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1,1,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
-                                1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
-                                1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
-                                1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
-                                1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
-                                1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
-                                1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
-                                1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0];
+  const physicalDefenseArray = 
+    [13, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 47, 50, 53, 56, 59, 62, 65, 68, 71, 74, 77, 80, 83, 86, 88, 91, 94, 97,
+     100, 103, 106, 109, 112, 115, 117, 120, 123, 126, 129, 132, 134, 137, 140, 143, 145, 148, 151, 153, 156, 158, 161, 164, 166, 168, 171, 173, 175,
+     178, 180, 181, 182, 183, 184, 185, 187, 188, 189, 190, 191, 192, 194, 195, 196, 197, 198, 199, 201, 202, 203, 204, 205, 206, 207, 208, 209, 211,
+     212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 228, 229, 230, 231, 232, 232, 233, 234, 235, 236, 237, 238, 239, 240,
+     241, 242, 243, 244, 244, 245, 246, 247, 248, 249, 249, 250, 251, 252, 252, 253, 254, 254, 255, 255, 255, 255, 255, 255, 255, 255, 255, 256, 256,
+     256, 256, 256, 256, 256, 256, 256, 257, 257, 257, 257, 257, 257, 257, 257, 257, 258, 258, 258, 258, 258, 258, 258, 258, 258, 259, 259, 259, 259,
+     259, 259, 259, 259, 259, 260, 260, 260, 260, 260, 260, 260, 260, 260, 261, 261, 261, 261, 261, 261, 261, 261, 261, 262, 262, 262, 262, 262, 262,
+     262, 262, 262, 263, 263, 263, 263, 263, 263, 263, 263, 263, 264, 264, 264, 264, 264, 264, 264, 264, 264, 265, 265, 265, 265, 265, 265, 265, 265,
+     265, 266, 266, 266, 266, 266, 266, 266, 266, 266, 267, 267, 267, 267, 267, 267, 267, 267, 267, 268, 268, 268, 268, 268, 268, 268, 268, 268, 269,
+     269, 269, 269, 269, 269, 269, 269, 269, 270, 270, 270, 270, 270, 270, 270, 270, 270, 271, 271, 271, 271, 271, 271, 271, 271, 271, 272, 272, 272,
+     272, 272, 272, 272, 272, 272, 273, 273, 273, 273, 273, 273, 273, 273, 273, 274, 274, 274, 274, 274, 274, 274, 274, 274, 275, 275, 275, 275, 275,
+     275, 275, 275, 275, 276, 276, 276, 276, 276, 276, 276, 276, 276, 277, 277, 277, 277, 277, 277, 277, 277, 277, 278, 278, 278, 278, 278, 278, 278,
+     278, 278, 279, 279, 279, 279, 279, 279, 279, 279, 279, 280, 280, 280, 280, 280, 280, 280, 280, 280, 281, 281, 281, 281, 281, 281, 281, 281, 281,
+     282, 282, 282, 282, 282, 282, 282, 282, 282, 283, 283, 283, 283, 283, 283, 283, 283, 283, 284, 284, 284, 284, 284, 284, 284, 284, 284, 285, 285,
+     285, 285, 285, 285, 285, 285, 285, 286, 286, 286, 286, 286, 286, 286, 286, 286, 287, 287, 287, 287, 287, 287, 287, 287, 287, 288, 288, 288, 288,
+     288, 288, 288, 288, 288, 289, 289, 289, 289, 289, 289, 289, 289, 289, 290, 290, 290, 290, 290, 290, 290, 290, 290, 291, 291, 291, 291, 291, 291,
+     291, 291, 291, 292, 292, 292, 292, 292, 292, 292, 292, 292, 293, 293, 293, 293, 293, 293, 293, 293, 293, 294, 294, 294, 294, 294, 294, 294, 294,
+     294, 295, 295, 295, 295, 295, 295, 295, 295, 295, 296, 296, 296, 296, 296, 296, 296, 296, 296, 297, 297, 297, 297, 297, 297, 297, 297, 297, 298,
+     298, 298, 298, 298, 298, 298, 298, 298, 299, 299, 299, 299, 299];
+
                                 
    if (level == 4 || level < 11){
+    var calculatedPhysicalDefense = 10;
     physicalDefenseDisplay.textContent = calculatedPhysicalDefense;
    }
    else if (level >= 11){
-    var loopCount = level -10;
-    for (let i = 0; i < loopCount; i++){
-      calculatedPhysicalDefense += physicalDefenseArray[i];
-    }
+    var levelOffset = level -11;
+    calculatedPhysicalDefense = physicalDefenseArray[levelOffset];
     physicalDefenseDisplay.textContent = calculatedPhysicalDefense;
    }
  }
  function calculateSlowPoisonRes () {
   endurance = parseInt(enduranceInput.value);
-  var calculatedPoisonRes = 25;
-  slowPoisonResistanceArray = [2,3,6,6,6,6,6,2,3,3,2,3,3,2,3,3,2,3,3,2,3,3,0,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,1,0,1,1,0,1,
-                               1,1,0,1,1,1,0,1,1,1,0,1,1,0,1,0,1,1,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,1];
-   const loopCount = endurance - 8;
-   for(let i = 0; i< loopCount; i++){
-    calculatedPoisonRes += slowPoisonResistanceArray[i];
-   }
+  slowPoisonResistanceArray = 
+     [25, 27, 30, 36, 42, 48, 54, 60, 62, 65, 68, 70, 73, 76, 78, 81, 84, 86, 89, 92, 94, 97, 100, 100, 101, 102, 102, 103, 104,
+     105, 105, 106, 107, 107, 108, 109, 110, 110, 111, 112, 113, 113, 114, 115, 115, 116, 117, 118, 118, 119, 120, 121, 121, 122, 123, 124, 124, 125, 126,
+     126, 127, 127, 128, 129, 130, 131, 131, 132, 133, 134, 134, 135, 136, 136, 137, 138, 139, 139, 140, 141, 142, 142, 143, 144, 144, 145, 146, 147, 147,
+     148, 149, 150];
+   const levelOffset = endurance - 8;
+    const calculatedPoisonRes = slowPoisonResistanceArray[levelOffset];
    slowPoisonDefenseDisplay.textContent = calculatedPoisonRes;
  }
 
  function calculateRapidPoisonRes () {
   endurance = parseInt(enduranceInput.value);
-  var calculatedPoisonRes = 33;
-  const rapidPoisonResistanceArray = [3,4,4,4,4,4,4,2,3,3,2,3,3,2,3,3,2,3,3,2,3,3,0,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,1,0,1,1,0,1,
-                               1,1,0,1,1,1,0,1,1,1,0,1,1,0,1,0,1,1,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,1];
-   const loopCount = endurance - 8;
-   for(let i = 0; i< loopCount; i++){
-    calculatedPoisonRes += rapidPoisonResistanceArray[i];
-    console.log("endurance is_, index is _, value is _", endurance, i, rapidPoisonResistanceArray[i]);
-   }
+  const rapidPoisonResistanceArray = 
+  [33, 36, 40, 44, 48, 52, 56, 60, 62, 65, 68, 70, 73, 76, 78, 81, 84, 86, 89, 92, 94, 97, 100, 100, 101, 102, 102, 103, 104, 105, 105, 106, 107, 107, 108,
+     109, 110, 110, 111, 112, 113, 113, 114, 115, 115, 116, 117, 118, 118, 119, 120, 121, 121, 122, 123, 124, 124, 125, 126, 126, 127, 127, 128, 129, 130,
+      131, 131, 132, 133, 134, 134, 135, 136, 136, 137, 138, 139, 139, 140, 141, 142, 142, 143, 144, 144, 145, 146, 147, 147, 148, 149, 150];
+   const levelOffset = endurance - 8;
+   const calculatedPoisonRes = rapidPoisonResistanceArray[levelOffset];
    rapidPoisonDefenseDisplay.textContent = calculatedPoisonRes;
  }
 
  function calculateFrenzyRes (){
   let insight = insightInput.value;
-  const frenzyResArray = [-3, -3, -2, -3, -3, -2, -3, -3, -2, -3, -3, -2, -3, -3, -2, -2, -1, -1, -2, -1, -1, -2, -1, -1, -2, -1,
-     -1, -2, -1, -1, -2, -1, -1, -2, -1, -1, -2, -1, -1, -2, -1, -1, -2, -1, -1, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0,
-      -1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0];
+  const frenzyResArray = [97, 94, 92, 89, 86, 84, 81, 78, 76, 73, 70, 68, 65, 62, 60, 58, 57, 56, 54, 53, 52, 50, 49, 48, 46, 45, 44, 42, 41, 40, 38, 37, 36,
+     34, 33, 32, 30, 29, 28, 26, 25, 24, 22, 21, 20, 19, 19, 19, 18, 18, 18, 18, 17, 17, 17, 17, 16, 16, 16, 16, 15, 15, 15, 15, 14, 14, 14, 14, 13, 13, 13, 13,
+      12, 12, 12, 12, 11, 11, 11, 11, 10, 10, 10, 10];
   if (insight <= 15){
-    console.log("frenzy is below 15");
-    const frenzyRes = 100;
+    var frenzyRes = 100;
     frenzyResDisplay.textContent = frenzyRes;
-    console.log("frenzy res is ", frenzyRes);
   }
   else if (insight >= 16){
-    console.log("frenzy is: ", insight);
-    var frenzyRes = 100;
-    loopCount = insight - 15;
-    for(let i = 0;i< loopCount;i++ ){
-      frenzyRes += frenzyResArray[i];
-      console.log("frenzy res is ___, frenzyarray value is___ ", frenzyRes, frenzyResArray[i]);
-    }
-
+    levelOffset = insight - 16;
+    var frenzyRes = frenzyResArray[levelOffset];
     frenzyResDisplay.textContent = frenzyRes;
   }
  }
@@ -489,86 +488,55 @@ document.addEventListener('DOMContentLoaded', function() {
 
     
   // Health calculation based on vitality
-  function calculateHealth(vitality) {
-      const HPchange = [20, 21, 21, 21, 22, 22, 21, 23, 16, 21, 23,25,26,28,28,29,30,30,32, 31,33,32,34,23,24, //32
-                       23,23,23,23,22,22,21,21,21,20,20,19,19,18,16,16,15,11,8,9,9,9,9,9,9,9,9,8,9,9,9,8,9,9,  //66
-                       8,9,8,9,8,9,8,9,8,8,9,8,8,8,9,8,8,8,8,8,7,8,8,7,8,7,8,7,7,7,7,6,6];                     //99
-      var calculatedHealth = 511;
-      //base case for lowest possible vitality value
-      if(vitality == 7){
-          calculatedHealth = 511;
-          return calculatedHealth;
-      }
-          //all other cases
-    if (vitality > 7) {
-        loopCount = vitality - 7;
-        for(let i =0; i< loopCount; i++){
-            calculatedHealth += HPchange[i];
-        }
-        return calculatedHealth;
-    }
-
+  function calculateHealth() {
+    const vitality = parseInt(vitalityInput.value);
+      const HPArray =
+       [511,530, 552, 573, 594, 616, 638, 659, 682, 698, 719, 742, 767, 793, 821, 849, 878, 908, 938, 970,
+         1001, 1034, 1066, 1100, 1123, 1147, 1170, 1193, 1216, 1239, 1261, 1283, 1304, 1325, 1346, 1366,
+          1386, 1405, 1424, 1442, 1458, 1474, 1489, 1500, 1508, 1517, 1526, 1535, 1544, 1553, 1562, 1571,
+           1580, 1588, 1597, 1606, 1615, 1623, 1632, 1641, 1649, 1658, 1666, 1675, 1683, 1692, 1700, 1709,
+            1717, 1725, 1734, 1742, 1750, 1758, 1767, 1775, 1783, 1791, 1799, 1807, 1814, 1822, 1830, 1837,
+             1845, 1852, 1860, 1867, 1874, 1881, 1888, 1894, 1900];                     //99
+       levelOffset = vitality - 7;
+       const hp = HPArray[levelOffset];
+       hpDisplay.textContent = hp;
   }
     
-function calculateStamina(endurance){
-    const staminaChange = [2,1,2,2,2,1,2,2,2,2,2,2,2,3,2,2,2,3,2,3,2,2,3,3,2,3,2,3,3,2,3,3, //soft cap at 40
-                          0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,      //46,52,58,64,70 
-                          0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1];       //76,82,88,94,99
-    var calculatedStamina = 88;
-    if (endurance == 8){
-        calculatedStamina = 88;
-        return calculatedStamina;
+function calculateStamina(){
+  endurance = parseInt(enduranceInput.value);
+    const staminaArray = 
+    [88,90, 91, 93, 95, 97, 98, 100, 102, 104, 106, 108, 110, 112, 115, 117, 119, 121, 124,
+    126, 129, 131, 133, 136, 139, 141, 144, 146, 149, 152, 154, 157, 160, 160, 160, 160, 160, 160, 161, 161,
+    161, 161, 161, 161, 162, 162, 162, 162, 162, 162, 163, 163, 163, 163, 163, 163, 164, 164, 164, 164, 164,
+    164, 165, 165, 165, 165, 165, 165, 166, 166, 166, 166, 166, 166, 167, 167, 167, 167, 167, 167, 168, 168,
+    168, 168, 168, 168, 169, 169, 169, 169, 169, 170];    
+          levelOffset = endurance -8;    
+    var calculatedStamina = staminaArray[levelOffset]
+    staminaDisplay.textContent = calculatedStamina;
     }
-    if (endurance > 8){
-        loopCountEndurance = endurance - 8;
-        for (let i=0; i< loopCountEndurance; i++){
-            calculatedStamina += staminaChange[i];
-        }
-        return calculatedStamina;
-    }
-  }
-
-  function calculateDiscovery(arcane) {
-    var calculatedDiscovery = 100;
-    const discoveryChange = [3,3,3,3,3,3,3,3,3,4,3,3,3,3,3,4,3,3,3,3,3,4,2,2,2,2,2,2,2,2,2,2,2,1,2,3,2,2,2,2,1]; // levels 9 to 50 
+  function calculateDiscovery() {
+    arcane = parseInt(arcaneInput.value);
+    const discoveryArray =
+     [103, 106, 109, 112, 115, 118, 121, 124, 127, 131, 134, 137, 140, 143, 146, 150, 153,
+      156, 159, 162, 165, 169, 171, 173, 175, 177, 179, 181, 183, 185, 187, 189, 191, 192,
+      194, 197, 199, 201, 203, 205, 206];
     //min case
     if (arcane < 9) {
-      return calculatedDiscovery;
+      const discovery = 100;
+      discoveryDisplay.textContent = discovery;
     }
     // max case
     if (arcane >=50){
-      calculatedDiscovery = 209;
-      return calculatedDiscovery;
+      const discovery = 209;
+      discoveryDisplay.textContent = discovery;
     }
     if (arcane >= 9 && arcane < 50){
-      loopCountArcane = arcane - 8;
-      for (let i=0; i < loopCountArcane; i++){
-        calculatedDiscovery += discoveryChange[i];
-      }
-      return calculatedDiscovery;
+      const leveloffset = arcane - 9;
+      var discovery = discoveryArray[leveloffset];
+      discoveryDisplay.textContent = discovery;
+
     }
   }
-
-//functions to update derived values
-  function updateHealth() {
-    const vitality = parseInt(vitalityInput.value); // Get vitality
-    const health = calculateHealth(vitality);
-    hpDisplay.textContent = health; // Update the HP display
-  }
-    function updateStamina(){
-    const endurance = parseInt(enduranceInput.value); // Get endurance
-    const stamina = calculateStamina(endurance);
-    staminaDisplay.textContent = stamina; // Update the stamina display
-    }
-  function updateDiscovery(){
-    const arcane = parseInt(arcaneInput.value);
-    const discovery = calculateDiscovery(arcane);
-    discoveryDisplay.textContent = discovery;
-  }
-
-  // Set initial health value
-  updateHealth();
-  updateStamina();
 
   //insight input listner
   insightInput.addEventListener('input', function(){
@@ -577,14 +545,14 @@ function calculateStamina(endurance){
   });
   // Add event listener to update health on vitality change
   vitalityInput.addEventListener('input', function () {
-    updateHealth();
+    calculateHealth();
     updateLevel();
     echosForNextLevel();
     updatePhysicalDefense();
   });
   // Add event listener to update stamina on endurance change
   enduranceInput.addEventListener('input', function () {
-    updateStamina();
+    calculateStamina();
     updateLevel();
     echosForNextLevel();
     updatePhysicalDefense();
@@ -593,7 +561,7 @@ function calculateStamina(endurance){
   });
   // Add event listener to update item discovery on arcane change
   arcaneInput.addEventListener('input', function () {
-     updateDiscovery();
+    calculateDiscovery();
      updateLevel();
      echosForNextLevel();
      updatePhysicalDefense();
