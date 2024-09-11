@@ -48,9 +48,9 @@
         <input type="number" id="arcane" name="arcane" />
     </form>
     <div class="build-results-container">
-         <div>HP: <span id="HP">currentHealth</span></div>
-        <div>Stamina: <span id="Stamina">Stamina</span></div>
-        <div>Discovery: <span id="discovery">Discovery</span></div> 
+         <div>HP: <span id="HP">658</span></div>
+        <div>Stamina: <span id="Stamina">93</span></div>
+        <div>Discovery: <span id="discovery">100</span></div> 
         <div>R-hand-WPN1 ATK: <span id="rAttack1">32</span> </div>
         <div>R-hand WPN 2 ATK: <span id="rAttack2">32</span></div>
         <div>L-hand WPN 1 ATK: <span id="lAttack1">32</span> </div>
@@ -83,10 +83,28 @@
         </select>
     </div>
     <div class="equipment">
-        Head Piece<br>
-        Chest<br>
-        Hands<br>
-        Legs<br><br>
+        
+        <label for = "head">Head</label>
+        <select id ="head">
+        <option value = "naked">Naked</option>
+        <option value = "hunterHat">Hunter Hat</option>
+        </select>
+        <label for = "chest">Chest</label>
+        <select id = "chest">
+            <option value = "naked">Naked</option>
+            <option value = "hunterGarb">Hunter Garb</option>
+        </select>
+        <label for = "hands">Hands</label>
+        <select id = "hands">
+            <option value = "naked">Naked</option>
+            <option value = "hunterGloves">Hunter Gloves</option>
+        </select>
+        <label for = "legs">Legs</label>
+        <select id = "legs">
+            <option value = "naked">Naked</option>
+            <option value = "hunterTrousers">Hunter Trousers</option>           
+        </select>
+        <br>
         <label for="rhand1-select">Right Hand 1:</label>
         <select id="rhand1-select">
             <!-- Options will be dynamically populated -->
@@ -165,13 +183,13 @@
     </div>
     <div class="damage-reduction">
         Damage Reduction <br>
-        Physical: <span id="physicalAmount">amount</span> <br>
-        VS. Blunt: <span id="vsBlunt">amount</span> <br>
-        VS. Thrust: <span id="vsThrust">amount</span> <br>
-        Blood: <span id="blood">amount</span> <br>
-        Arcane: <span id="arcanedef">amount</span> <br>
-        Fire: <span id="fire">amount</span> <br>
-        Bolt: <span id="bolt">amount</span> <br>
+        Physical: <span id="physicalAmount">0</span> <br>
+        VS. Blunt: <span id="vsBlunt">0</span> <br>
+        VS. Thrust: <span id="vsThrust">0</span> <br>
+        Blood: <span id="bloodDef">0</span> <br>
+        Arcane: <span id="arcaneDef">0</span> <br>
+        Fire: <span id="fireDef">0</span> <br>
+        Bolt: <span id="boltDef">0</span> <br>
     </div>
 </body>
 </html>

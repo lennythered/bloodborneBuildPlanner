@@ -480,6 +480,14 @@ document.addEventListener('DOMContentLoaded', function() {
   const physicalDefenseDisplay = document.getElementById("physicalDef");
   const slowPoisonDefenseDisplay = document.getElementById("slowPoisonRes");
   const rapidPoisonDefenseDisplay = document.getElementById("rapidPoisonRes");
+  const physicalAmountDisplay = document.getElementById("physicalAmount");
+  const vsBluntDisplay = document.getElementById("vsBlunt");
+  const vsThrustDisplay = document.getElementById("vsThrust");
+  const bloodDefDisplay = document.getElementById("bloodDef");
+  const arcaneDefDisplay = document.getElementById("arcaneDef");
+  const fireDefDisplay = document.getElementById("fireDef");
+  const boltDefDisplay = document.getElementById("boltDef");
+    
   //variable to manipulate the displayed right hand attack for weapon 1
   const weapon1RightHandAttackDisplay = document.getElementById("rAttack1");
   const weapon2RightHandAttackDisplay = document.getElementById("rAttack2");
@@ -956,4 +964,183 @@ function calculateAR() {
   
 }
 
+
+////////////////////////////////////////Below deals with clothing and clothing defense reduction////////////////////////////////////////////////
+class Attire {
+  constructor(id, name, flatDefense, hiddenMultiplyer) {
+    this.id = id;
+    this.name = name;
+    this.flatDefense = flatDefense;
+    this.hiddenMultiplyer = hiddenMultiplyer;
+  }
+}
+
+const attireData = {
+  naked: new Attire('naked', "Naked", {
+      physical: 0, blunt: 0, thrust: 0, blood: 0, arcane: 0, fire: 0, bolt: 0
+    },
+    {  
+      physical: 1, blunt: 1, thrust: 1, blood: 1, arcane: 1, fire: 1, bolt: 1
+    }
+  ),
+  hunterHat: new Attire('hunterHat', "Hunter Hat", {
+      physical: 50, blunt: 50, thrust: 40, blood: 50, arcane: 20, fire: 50, bolt: 30
+    },
+    {  
+      physical: 0.95, blunt: 0.95, thrust: 0.96, blood: 0.95, arcane: 0.98, fire: 0.95, bolt: 0.97
+    }
+  ),
+  hunterGarb: new Attire('hunterGarb', "Hunter Garb", {
+      physical: 110, blunt: 100, thrust: 80, blood: 110, arcane: 40, fire: 110, bolt: 70
+    },
+    {  
+      physical: 0.89, blunt: 0.90, thrust: 0.92, blood: 0.89, arcane: 0.96, fire: 0.89, bolt: 0.93
+    }
+  ),
+  hunterTrousers: new Attire('hunterTrousers', "Hunter Trousers", {
+      physical: 60, blunt: 60, thrust: 50, blood: 60, arcane: 50, fire: 60, bolt: 50
+    },
+    {  
+      physical: 0.94, blunt: 0.94, thrust: 0.95, blood: 0.94, arcane: 0.95, fire: 0.94, bolt: 0.95
+    }
+  ),
+  hunterGloves: new Attire('hunterGloves', "Hunter Gloves", {
+      physical: 50, blunt: 50, thrust: 50, blood: 50, arcane: 40, fire: 60, bolt: 50
+    },
+    {  
+      physical: 0.95, blunt: 0.95, thrust: 0.95, blood: 0.95, arcane: 0.96, fire: 0.94, bolt: 0.95
+    }
+  )
+};
+
+
+
+function putOnHat (){
+  const hatSelected = document.getElementById("head");
+  const hatValues = hatSelected.value;
+  const hat = attireData[hatValues];
+  return hat;
+}
+
+function putOnShirt (){
+   const chestSelected = document.getElementById("chest");
+   const chestValues = chestSelected.value;
+   const chest = attireData[chestValues];
+   return chest;
+ }
+
+ function putOnGloves (){
+   const gloveSelected = document.getElementById("hands");
+   const gloveValues = gloveSelected.value;
+   const gloves = attireData[gloveValues];
+   console.log("gloves value is ", gloves.hiddenMultiplyer);
+   return gloves;
+ }
+
+ function putOnPants (){
+   const pantsSelected = document.getElementById("legs");
+   const pantsValues = pantsSelected.value;
+   const pants = attireData[pantsValues];
+   return pants;
+ }
+
+function calculateClothingDefense (){
+    // clothing physical defense is based on the formula 1000*(1 -(headHiddenMulitplier*chestHiddenMultiplier*glovesHiddenMultiplier*legsHiddenMultiplier*runes multiplier))
+    // this also inclues runes
+  const head = putOnHat();
+  const chest = putOnShirt();
+  const gloves = putOnGloves();
+  const pants = putOnPants();
+  //physical
+  const headHiddenMultiplierPhys = head.hiddenMultiplyer.physical;
+  const chestHiddenMultiplierPhys = chest.hiddenMultiplyer.physical;
+  const glovesHiddenMultiplierPhys = gloves.hiddenMultiplyer.physical;
+  const pantsHiddenMultiplierPhys = pants.hiddenMultiplyer.physical;
+  let physicalReduction = (1000*(1-(headHiddenMultiplierPhys*chestHiddenMultiplierPhys*glovesHiddenMultiplierPhys*pantsHiddenMultiplierPhys)));
+  let physicalReductionRounded = Math.floor(physicalReduction);
+  physicalAmountDisplay.textContent = physicalReductionRounded;
+
+  //blunt
+  const headHiddenMultiplierBlunt = head.hiddenMultiplyer.blunt;
+  const chestHiddenMultiplierBlunt = chest.hiddenMultiplyer.blunt;
+  const glovesHiddenMultiplierBlunt = gloves.hiddenMultiplyer.blunt;
+  const pantsHiddenMultiplierBlunt = pants.hiddenMultiplyer.blunt;
+  let bluntReduction = (1000*(1-(headHiddenMultiplierBlunt*chestHiddenMultiplierBlunt*glovesHiddenMultiplierBlunt*pantsHiddenMultiplierBlunt)));
+  let bluntReductionRounded = Math.floor(bluntReduction);
+  vsBluntDisplay.textContent = bluntReductionRounded;
+
+  //thurst
+  const headHiddenMultiplierThrust = head.hiddenMultiplyer.thrust;
+  const chestHiddenMultiplierThrust = chest.hiddenMultiplyer.thrust;
+  const glovesHiddenMultiplierThrust = gloves.hiddenMultiplyer.thrust;
+  const pantsHiddenMultiplierThrust = pants.hiddenMultiplyer.thrust;
+  let thrustReduction = (1000*(1-(headHiddenMultiplierThrust*chestHiddenMultiplierThrust*glovesHiddenMultiplierThrust*pantsHiddenMultiplierThrust)));
+  let thrustReductionRounded = Math.floor(thrustReduction);
+  vsThrustDisplay.textContent = thrustReductionRounded;
+
+  //blood
+  const headHiddenMultiplierBlood = head.hiddenMultiplyer.blood;
+  const chestHiddenMultiplierBlood = chest.hiddenMultiplyer.blood;
+  const glovesHiddenMultiplierBlood = gloves.hiddenMultiplyer.blood;
+  const pantsHiddenMultiplierBlood = pants.hiddenMultiplyer.blood;
+  let bloodReduction = (1000*(1-(headHiddenMultiplierBlood*chestHiddenMultiplierBlood*glovesHiddenMultiplierBlood*pantsHiddenMultiplierBlood)));
+  let bloodReductionRounded = Math.floor(bloodReduction);
+  bloodDefDisplay.textContent = bloodReductionRounded;
+
+  //arcane
+  const headHiddenMultiplierArcane = head.hiddenMultiplyer.arcane;
+  const chestHiddenMultiplierArcane = chest.hiddenMultiplyer.arcane;
+  const glovesHiddenMultiplierArcane = gloves.hiddenMultiplyer.arcane;
+  const pantsHiddenMultiplierArcane = pants.hiddenMultiplyer.arcane;
+  let arcaneReduction = (1000*(1-(headHiddenMultiplierArcane*chestHiddenMultiplierArcane*glovesHiddenMultiplierArcane*pantsHiddenMultiplierArcane)));
+  let arcaneReductionRounded = Math.floor(arcaneReduction);
+  arcaneDefDisplay.textContent = arcaneReductionRounded;
+
+  //fire
+  const headHiddenMultiplierFire = head.hiddenMultiplyer.fire;
+  const chestHiddenMultiplierFire = chest.hiddenMultiplyer.fire;
+  const glovesHiddenMultiplierFire = gloves.hiddenMultiplyer.fire;
+  const pantsHiddenMultiplierFire = pants.hiddenMultiplyer.fire;
+  let fireReduction = (1000*(1-(headHiddenMultiplierFire*chestHiddenMultiplierFire*glovesHiddenMultiplierFire*pantsHiddenMultiplierFire)));
+  let fireReductionRounded = Math.floor(fireReduction);
+  fireDefDisplay.textContent = fireReductionRounded;
+  //bolt
+  const headHiddenMultiplierBolt = head.hiddenMultiplyer.bolt;
+  const chestHiddenMultiplierBolt = chest.hiddenMultiplyer.bolt;
+  const glovesHiddenMultiplierBolt = gloves.hiddenMultiplyer.bolt;
+  const pantsHiddenMultiplierBolt = pants.hiddenMultiplyer.bolt;
+  let boltReduction = (1000*(1-(headHiddenMultiplierBolt*chestHiddenMultiplierBolt*glovesHiddenMultiplierBolt*pantsHiddenMultiplierBolt)));
+  let boltReductionRounded = Math.floor(boltReduction);
+  boltDefDisplay.textContent = boltReductionRounded;
+
+
+
+
+  
+}
+const head = document.getElementById('head');
+head.addEventListener('change', function () {
+  putOnHat();
+  calculateClothingDefense ();
+} );
+const chest = document.getElementById('chest');
+chest.addEventListener('change', function () {
+  putOnShirt();
+  calculateClothingDefense ();
+});
+const hands = document.getElementById('hands');
+hands.addEventListener('change', function() {
+  putOnGloves();
+  calculateClothingDefense ();
+});
+const legs = document.getElementById('legs');
+legs.addEventListener('change', function() {
+  putOnPants();
+  calculateClothingDefense ();
+
+
+  ///////////////////////////////////////////////////////////Runes/////////////////////////////////////////////////////////
+
+  
+});
 });
