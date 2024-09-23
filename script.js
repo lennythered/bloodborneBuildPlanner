@@ -493,7 +493,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const weapon2RightHandAttackDisplay = document.getElementById("rAttack2");
   const weapon1LeftHandAttackDisplay = document.getElementById("lAttack1");
   const weapon2LeftHandAttackDisplay = document.getElementById("lAttack2");
-
     
   // Health calculation based on vitality
   function calculateHealth() {
@@ -511,6 +510,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
     
 function calculateStamina(){
+  const selectedSlot1 = slot1Select.value;
+  const selectedSlot2 = slot2Select.value;
+  const selectedSlot3 = slot3Select.value;
   endurance = parseInt(enduranceInput.value);
     const staminaArray = 
     [88,90, 91, 93, 95, 97, 98, 100, 102, 104, 106, 108, 110, 112, 115, 117, 119, 121, 124,
@@ -520,7 +522,35 @@ function calculateStamina(){
     168, 168, 168, 168, 169, 169, 169, 169, 169, 170];    
           levelOffset = endurance -8;    
     var calculatedStamina = staminaArray[levelOffset]
+    const isStaminaRune = 
+    (selectedSlot1 === 'antiClockwiseMetamorphosis1') || (selectedSlot2 === 'antiClockwiseMetamorphosis1') || (selectedSlot3 === 'antiClockwiseMetamorphosis1') ||
+    (selectedSlot1 === 'antiClockwiseMetamorphosis2') || (selectedSlot2 === 'antiClockwiseMetamorphosis2') || (selectedSlot3 === 'antiClockwiseMetamorphosis2') ||
+    (selectedSlot1 === 'antiClockwiseMetamorphosis3') || (selectedSlot2 === 'antiClockwiseMetamorphosis3') || (selectedSlot3 === 'antiClockwiseMetamorphosis3');
+    console.log("stamina rune status ", isStaminaRune);
+    
+    if (isStaminaRune){
+      let staminaMultiplier = 1.0;  // Start with a base multiplier of 1.0 (no change)
+
+      // Check each selected slot and apply the multiplicative stamina bonus
+      if (selectedSlot1 === 'antiClockwiseMetamorphosis1') staminaMultiplier *= 1.10;  // +10% stamina
+      if (selectedSlot1 === 'antiClockwiseMetamorphosis2') staminaMultiplier *= 1.15;  // +15% stamina
+      if (selectedSlot1 === 'antiClockwiseMetamorphosis3') staminaMultiplier *= 1.20;  // +20% stamina
+  
+      if (selectedSlot2 === 'antiClockwiseMetamorphosis1') staminaMultiplier *= 1.10;
+      if (selectedSlot2 === 'antiClockwiseMetamorphosis2') staminaMultiplier *= 1.15;
+      if (selectedSlot2 === 'antiClockwiseMetamorphosis3') staminaMultiplier *= 1.20;
+  
+      if (selectedSlot3 === 'antiClockwiseMetamorphosis1') staminaMultiplier *= 1.10;
+      if (selectedSlot3 === 'antiClockwiseMetamorphosis2') staminaMultiplier *= 1.15;
+      if (selectedSlot3 === 'antiClockwiseMetamorphosis3') staminaMultiplier *= 1.20;
+      const staminaBonusPercentage = (staminaMultiplier - 1) * 100;
+      calculatedStamina = calculatedStamina*staminaMultiplier;
+      staminaDisplay.textContent = calculatedStamina;
+      console.log("Total Stamina Bonus: " + staminaBonusPercentage.toFixed(2) + "%");
+    }
+    else {
     staminaDisplay.textContent = calculatedStamina;
+    }
     }
   function calculateDiscovery() {
     arcane = parseInt(arcaneInput.value);
@@ -542,7 +572,6 @@ function calculateStamina(){
       const leveloffset = arcane - 9;
       var discovery = discoveryArray[leveloffset];
       discoveryDisplay.textContent = discovery;
-
     }
   }
 
@@ -595,9 +624,6 @@ function calculateStamina(){
     echosForNextLevel();
     updatePhysicalDefense();
 });
-
-
-
 
 //////////////////////////////////////////////////This section handles the weapon select////////////////////////////////////////////////////////
 
@@ -729,7 +755,6 @@ function populateWeaponOptions() {
     createLeftOptions(selectedLhand1, lhand2Select, selectedLhand2);
 }
 
-
 function createWeaponInstance(weaponId) {
   const weaponInfo = weaponData[weaponId];
 
@@ -755,7 +780,6 @@ function createWeaponInstance(weaponId) {
     console.warn(`${weapon.name} cannot be equipped. Stat requirements not met.`);
     return null;
   }
-
   return weapon;
 }
 // Function to handle weapon selection change
@@ -809,7 +833,6 @@ upgradeLevelLeftWeapon2.addEventListener('change', calculateAR);
 // Add event listeners to update when upgrade level is chosen
 //upgradeLevelRightWeapon1.addEventListener('change', calculateAR());
 
-
 ////////////////////////////////////////////////////////Section below deals with AR calculations////////////////////////////////////////////////////////////////////////
 //
 
@@ -831,7 +854,6 @@ function calculateStrengthAttributeSaturation () {
     return  (0.85 + (strength-50)*0.00306);
     //console.log("strength atttribute is", strengthAttributeRating);
   }
-
 }
 
 function calculateSkillAttributeSaturation () {
@@ -960,10 +982,7 @@ function calculateAR() {
       let roundedARL2 = Math.round(totalARL2);
       weapon2LeftHandAttackDisplay.textContent = roundedARL2;
     }
- 
-  
 }
-
 
 ////////////////////////////////////////Below deals with clothing and clothing defense reduction////////////////////////////////////////////////
 class Attire {
@@ -1013,8 +1032,6 @@ const attireData = {
   )
 };
 
-
-
 function putOnHat (){
   const hatSelected = document.getElementById("head");
   const hatValues = hatSelected.value;
@@ -1045,7 +1062,8 @@ function putOnShirt (){
  }
 
 function calculateClothingDefense (){
-    // clothing physical defense is based on the formula 1000*(1 -(headHiddenMulitplier*chestHiddenMultiplier*glovesHiddenMultiplier*legsHiddenMultiplier*runes multiplier))
+    // clothing physical defense stacks multiplicitively and is based on the formula:
+    // 1000*(1 -(headHiddenMulitplier*chestHiddenMultiplier*glovesHiddenMultiplier*legsHiddenMultiplier*runes multiplier))
     // this also inclues runes
   const head = putOnHat();
   const chest = putOnShirt();
@@ -1113,10 +1131,6 @@ function calculateClothingDefense (){
   let boltReductionRounded = Math.floor(boltReduction);
   boltDefDisplay.textContent = boltReductionRounded;
 
-
-
-
-  
 }
 const head = document.getElementById('head');
 head.addEventListener('change', function () {
@@ -1137,10 +1151,100 @@ const legs = document.getElementById('legs');
 legs.addEventListener('change', function() {
   putOnPants();
   calculateClothingDefense ();
-
+});
 
   ///////////////////////////////////////////////////////////Runes/////////////////////////////////////////////////////////
+// Example list of Caryll Runes
+const caryllRunes = [
+  { id: 'noRune', name: 'No Rune', effect: 'No effect' },
+  { id: 'oedonWrithe', name: 'Oedon Writhe', effect: 'Grants additional Quicksilver Bullets from visceral attacks' },
+  { id: 'antiClockwiseMetamorphosis1', name: 'Anti-Clockwise Metamorphosis (1)', effect: 'Boosts max stamina +10%	' },
+  { id: 'antiClockwiseMetamorphosis2', name: 'Anti-Clockwise Metamorphosis (2)', effect: 'Boosts max stamina +15%	' },
+  { id: 'antiClockwiseMetamorphosis3', name: 'Anti-Clockwise Metamorphosis (3)', effect: 'Boosts max stamina +20%	' },
+  { id: 'heir', name: 'Heir', effect: 'Increases Blood Echoes gained from visceral attacks' },
+  { id: 'clawmark', name: 'Clawmark', effect: 'Increases the damage of visceral attacks' },
+  { id: 'moon', name: 'Moon', effect: 'Increases Blood Echoes from defeated enemies' },
+  { id: 'bloodRapture', name: 'Blood Rapture', effect: 'Restores HP after visceral attacks' }
 
-  
-});
+];
+
+function updateRuneEffect() {
+  const selectedSlot1 = slot1Select.value;
+  const selectedSlot2 = slot2Select.value;
+  const selectedSlot3 = slot3Select.value;
+
+  const runeEffectElement1 = document.getElementById('runeEffect1');
+  const runeEffectElement2 = document.getElementById('runeEffect2');
+  const runeEffectElement3 = document.getElementById('runeEffect3');
+
+  // Find the corresponding rune objects from the caryllRunes array
+  const rune1 = caryllRunes.find(rune => rune.id === selectedSlot1);
+  const rune2 = caryllRunes.find(rune => rune.id === selectedSlot2);
+  const rune3 = caryllRunes.find(rune => rune.id === selectedSlot3);
+
+  // Update the text content with the effect of the selected runes
+  runeEffectElement1.textContent = rune1 ? rune1.effect : 'No effect';
+  runeEffectElement2.textContent = rune2 ? rune2.effect : 'No effect';
+  runeEffectElement3.textContent = rune3 ? rune3.effect : 'No effect';
+}
+
+function createRuneOptions(excludeIds, selectElement, selectedRune) {
+  caryllRunes.forEach(rune => {
+      if (!excludeIds.includes(rune.id) || rune.id === 'noRune') {
+          const option = document.createElement('option');
+          option.value = rune.id;
+          option.textContent = rune.name;
+          option.title = rune.effect; // Tooltip with the rune's effect
+          if (rune.id === selectedRune) {
+              option.selected = true;
+          }
+          selectElement.appendChild(option);
+      }
+  });
+
+  // Update rune effect when selection changes
+  selectElement.addEventListener('change', function() {
+      updateRuneEffect();
+  });
+}
+
+function populateRuneOptions() {
+  const selectedSlot1 = slot1Select.value;
+  const selectedSlot2 = slot2Select.value;
+  const selectedSlot3 = slot3Select.value;
+
+  slot1Select.innerHTML = '';
+  slot2Select.innerHTML = '';
+  slot3Select.innerHTML = '';
+
+  createRuneOptions([selectedSlot2, selectedSlot3], slot1Select, selectedSlot1);
+  createRuneOptions([selectedSlot1, selectedSlot3], slot2Select, selectedSlot2);
+  createRuneOptions([selectedSlot1, selectedSlot2], slot3Select, selectedSlot3);
+}
+
+const slot1Select = document.getElementById('slot1');
+const slot2Select = document.getElementById('slot2');
+const slot3Select = document.getElementById('slot3');
+
+populateRuneOptions();
+
+slot1Select.addEventListener('change', function() { 
+  populateRuneOptions();
+  calculateStamina();
+}
+);
+slot2Select.addEventListener('change', function() { 
+  populateRuneOptions();
+  calculateStamina();
+}
+);
+slot3Select.addEventListener('change', function() { 
+  populateRuneOptions();
+  calculateStamina();
+}
+);
+
+
+
+
 });
